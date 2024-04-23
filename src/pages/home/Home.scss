@@ -25,3 +25,11 @@
     }
   }
 }
+
+@media (max-width: 600px) {
+  .category-section h4,
+  .category-section .category h3,
+  .category-section .category button {
+    text-align: center;
+  }
+}

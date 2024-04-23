@@ -1,8 +1,7 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import "./Carousel.scss";
-import { responsive } from "./data";
+import { responsive } from "./Data";
 
 const ProductCarousel = ({ products }) => {
   return (
@@ -13,7 +12,7 @@ const ProductCarousel = ({ products }) => {
         infinite={true}
         autoPlay={true}
         autoPlaySpeed={3000}
-        customTransition="all 500ms ease"
+        customTransition="all 5000 ease"
         transitionDuration={1000}
       >
         {products}

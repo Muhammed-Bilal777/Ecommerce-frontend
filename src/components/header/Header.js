@@ -1,148 +1,96 @@
-import { useEffect, useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import styles from "./Header.module.scss";
-import { FaShoppingCart, FaTimes, FaUserCircle } from "react-icons/fa";
-import { HiOutlineMenuAlt3 } from "react-icons/hi";
-import ShowOnLogin, { ShowOnLogout } from "../hiddenLink/hiddenLink";
-import { useDispatch, useSelector } from "react-redux";
-import { RESET_AUTH, logout } from "../../redux/features/auth/authSlice";
-import { AdminOnlyLink } from "../adminOnlyRoute/AdminOnlyRoute";
-import { UserName } from "../../pages/profile/Profile";
-import {
-  CALCULATE_TOTAL_QUANTITY,
-  selectCartTotalQuantity,
-} from "../../redux/features/product/cartSlice";
+import { Link, NavLink } from "react-router-dom";
+import style from "./Header.module.scss";
+import { FaShoppingCart } from "react-icons/fa";
+import { RiMenuFoldFill } from "react-icons/ri";
+import { CgCloseR } from "react-icons/cg";
+import { useState } from "react";
 
 export const logo = (
-  <div className={styles.logo}>
+  <div className={style.logo}>
     <Link to="/">
       <h2>
-        Shop<span>Ito</span>.
+        Shop<span>Ito</span>
       </h2>
     </Link>
   </div>
 );
 
-const activeLink = ({ isActive }) => (isActive ? `${styles.active}` : "");
+const activeLink = ({ isActive }) => (isActive ? `$style.active` : "");
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [scrollPage, setScrollPage] = useState(false);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  const cartTotalQuantity = useSelector(selectCartTotalQuantity);
-
-  useEffect(() => {
-    dispatch(CALCULATE_TOTAL_QUANTITY());
-  }, [dispatch]);
-
-  const fixNavbar = () => {
+  const fixNavBar = () => {
     if (window.scrollY > 50) {
-      setScrollPage(true);
+      setScrollPage(!false);
     } else {
       setScrollPage(false);
     }
   };
-  window.addEventListener("scroll", fixNavbar);
+
+  window.addEventListener("scroll", fixNavBar);
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
-
   const hideMenu = () => {
     setShowMenu(false);
   };
 
-  const logoutUser = async () => {
-    dispatch(RESET_AUTH());
-    await dispatch(logout());
-    localStorage.setItem("cartItems", JSON.stringify([]));
-    navigate("/login");
-    window.location.reload();
-  };
-
   const cart = (
-    <span className={styles.cart}>
+    <span className={style.cart}>
       <Link to="/cart">
         Cart
         <FaShoppingCart size={20} />
-        <p>{cartTotalQuantity}</p>
+        <p>0</p>
       </Link>
     </span>
   );
-
   return (
-    <header className={scrollPage ? `${styles.fixed}` : null}>
-      <div className={styles.header}>
+    <header className={scrollPage ? `${style.fixed}` : ""}>
+      <div className={style.header}>
         {logo}
-
         <nav
-          className={
-            showMenu ? `${styles["show-nav"]}` : `${styles["hide-nav"]}`
-          }
+          className={showMenu ? `${style["show-nav"]}` : `${style["hide-nav"]}`}
         >
           <div
             className={
               showMenu
-                ? `${styles["nav-wrapper"]} ${styles["show-nav-wrapper"]}`
-                : `${styles["nav-wrapper"]}`
+                ? `${style["nav-wrapper"]} ${style["show-nav-wrapper"]}`
+                : `${style["nav-wrapper"]}`
             }
             onClick={hideMenu}
           ></div>
-
-          <ul onClick={hideMenu}>
-            <li className={styles["logo-mobile"]}>
+          <ul>
+            <li className={style["logo-mobile"]} onClick={hideMenu}>
               {logo}
-              <FaTimes size={22} color="#fff" onClick={hideMenu} />
+              <CgCloseR size={22} color="#fff" onClick={hideMenu} />
             </li>
             <li>
               <NavLink to="/shop" className={activeLink}>
-                Shop
+                Shop{" "}
               </NavLink>
             </li>
-            <li>
-              <AdminOnlyLink>
-                <NavLink to="/admin/home" className={activeLink}>
-                  | &nbsp; Admin
-                </NavLink>
-              </AdminOnlyLink>
-            </li>
           </ul>
-          <div className={styles["header-right"]} onClick={hideMenu}>
-            <span className={styles.links}>
-              <ShowOnLogin>
-                <Link to="/profile">
-                  <FaUserCircle size={16} color="#ff7722" />
-                  <UserName />
-                </Link>
-              </ShowOnLogin>
-              <ShowOnLogout>
-                <NavLink to="/login" className={activeLink}>
-                  Login
-                </NavLink>
-                <NavLink to="/register" className={activeLink}>
-                  Register
-                </NavLink>
-              </ShowOnLogout>
-              <ShowOnLogin>
-                <NavLink to="/order-history" className={activeLink}>
-                  My Orders
-                </NavLink>
-              </ShowOnLogin>
-              <ShowOnLogin>
-                <NavLink to="/" onClick={logoutUser}>
-                  Logout
-                </NavLink>
-              </ShowOnLogin>
+
+          <div className={style["header-right"]}>
+            <span className={style.links}>
+              <NavLink to={"login"} className={activeLink}>
+                login
+              </NavLink>
+              <NavLink to={"register"} className={activeLink}>
+                Register
+              </NavLink>
+              <NavLink to={"order-history"} className={activeLink}>
+                My Order
+              </NavLink>
             </span>
             {cart}
           </div>
         </nav>
-
-        <div className={styles["menu-icon"]}>
-          {cart}
-          <HiOutlineMenuAlt3 size={28} onClick={toggleMenu} />
+        <div className={style["menu-icon"]}>
+          {cart} <RiMenuFoldFill size={28} onClick={toggleMenu} />
         </div>
       </div>
     </header>

@@ -1,34 +1,29 @@
-import { useEffect, useState } from "react";
-import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
-import { sliderData } from "./slider-data";
-import "./Slider.scss";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { IoIosArrowDropright, IoIosArrowDropleft } from "react-icons/io";
+import { sliderdata } from "./slider-data";
+
+import style from "./Slider.scss";
 
 const Slider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slideLength = sliderData.length;
-  //   console.log(slideLength);
   const navigate = useNavigate();
-
+  const slideLength = sliderdata.length;
   const autoScroll = true;
   let slideInterval;
-  let intervalTime = 5000;
-
-  const nextSlide = () => {
-    setCurrentSlide(currentSlide === slideLength - 1 ? 0 : currentSlide + 1);
-  };
+  const intervalTime = 3000;
 
   const prevSlide = () => {
     setCurrentSlide(currentSlide === 0 ? slideLength - 1 : currentSlide - 1);
   };
 
+  const nextSlide = () => {
+    setCurrentSlide(currentSlide === slideLength - 1 ? 0 : currentSlide + 1);
+  };
+
   useEffect(() => {
     setCurrentSlide(0);
   }, []);
-
-  //   const auto = () => {
-  //     slideInterval = setInterval(nextSlide, intervalTime);
-  //   };
 
   useEffect(() => {
     if (autoScroll) {
@@ -38,15 +33,22 @@ const Slider = () => {
       auto();
     }
     return () => clearInterval(slideInterval);
-  }, [currentSlide, slideInterval, autoScroll]);
+  }, [currentSlide, intervalTime, autoScroll]);
 
   return (
     <div className="slider">
-      <AiOutlineArrowLeft className="arrow prev" onClick={prevSlide} />
-      <AiOutlineArrowRight className="arrow next" onClick={nextSlide} />
-
-      {sliderData.map((slide, index) => {
-        const { image, heading, desc } = slide;
+      <IoIosArrowDropleft
+        className="arrow prev"
+        size={20}
+        onClick={prevSlide}
+      />
+      <IoIosArrowDropright
+        className="arrow next"
+        size={20}
+        onClick={nextSlide}
+      />
+      {sliderdata.map((slide, index) => {
+        const { heading, desc, image } = slide;
         return (
           <div
             key={index}
